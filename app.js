@@ -2,7 +2,6 @@ let countryCode = "PK";
 let countryCode1 = "US";
 let currencyCode = "PKR";
 let currencyCode1 = "USD";
-
 let selectElement = document.getElementById("to");
 for (let key in countryList) {
     if (countryList.hasOwnProperty(key)) {
@@ -44,21 +43,26 @@ selectElement1.addEventListener("change", function () {
 let btn = document.querySelector("#submit");
 btn.addEventListener("click", function (evnt) {
     evnt.preventDefault();
-    let amountDiv = document.querySelector(".amount");
-    let amountInput = amountDiv.querySelector("input");
-    let amount = amountInput.value;
-    console.log(amount);
-    const apiUrl = "https://v6.exchangerate-api.com/v6/c1895ba7c2e64ad0aae9f07f/pair";
-    const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-    const newApi = `${proxyUrl}${apiUrl}/${currencyCode1}/${currencyCode}`;
+
+    let amount = document.querySelector(".amount input").value;
     let msg = document.querySelector(".msg");
-    fetch(newApi, { headers: { 'Origin': 'http://127.0.0.1:3000', 'X-Requested-With': 'XMLHttpRequest' } })
+
+    const fromCurrency = currencyCode1;
+    const toCurrency = currencyCode;
+    const apiKey = "c7ba0c0b1d34f10e18ecd63aeabe4754";
+
+    const apiUrl = `https://api.exchangerate.host/convert?access_key=${apiKey}&from=${fromCurrency}&to=${toCurrency}&amount=${amount}`;
+
+    fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            let rate = data.conversion_rate;
-            let exchange = amount * rate;
-            let formattedExchange=exchange.toFixed(2);
-            msg.innerText = `${amount} ${currencyCode1} = ${formattedExchange} ${currencyCode}`;
+            if (!data.success) {
+                msg.innerText = "Invalid API Key or data error.";
+                return;
+            }
+
+            let formattedExchange = data.result.toFixed(2);
+            msg.innerText = `${amount} ${fromCurrency} = ${formattedExchange} ${toCurrency}`;
         })
         .catch(error => {
             console.error("Error fetching data:", error);
@@ -68,19 +72,25 @@ btn.addEventListener("click", function (evnt) {
 
 function updateExchangeRate() {
     let msg = document.querySelector(".msg");
-    const apiUrl = "https://v6.exchangerate-api.com/v6/c1895ba7c2e64ad0aae9f07f/pair";
-    const proxyUrl = "https://api.allorigins.win/raw?url=";
-    const newApi = `${proxyUrl}${apiUrl}/${currencyCode1}/${currencyCode}`;
-    fetch(newApi, { headers: { 'Origin': 'http://127.0.0.1:3000', 'X-Requested-With': 'XMLHttpRequest' } })
+    const apiKey = "c7ba0c0b1d34f10e18ecd63aeabe4754";
+    const fromCurrency = currencyCode1;
+    const toCurrency = currencyCode;
+    const apiUrl = `https://api.exchangerate.host/convert?access_key=${apiKey}&from=${fromCurrency}&to=${toCurrency}&amount=1`;
+
+    fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            let unformattedRate = data.conversion_rate;
-            let rate = unformattedRate.toFixed(2);
-            msg.innerText = `1 ${currencyCode1} = ${rate} ${currencyCode}`;
+            if (!data.success) {
+                msg.innerText = "Unable to fetch live exchange rate.";
+                return;
+            }
+
+            let rate = data.result.toFixed(2);
+            msg.innerText = `1 ${fromCurrency} = ${rate} ${toCurrency}`;
         })
         .catch(error => {
-            msg.innerText = "Error fetching data.";
-            console.error("Error fetching data:", error);
+            console.error("Fetch error:", error);
+            msg.innerText = "Error fetching exchange rate.";
         });
 }
 
