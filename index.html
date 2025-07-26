@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Currency Converter</title>
+</head>
+<body>
+<div class="container">
+<h1>Currency Converter</h1>
+<form class="form">
+    <div class="amount">
+        <label for="amount">Amount:</label>
+        <input type="number" min="0" id="amount" placeholder="Enter amount">
+    </div>
+    <div class="dropdown">
+        <div class="from">
+            <p>From:</p>
+            <div class="select-options">
+                <img id="imgFrom"  src="https://flagsapi.com/US/shiny/64.png" alt="flag">
+            <label for="from" class="visually-hidden"></label>
+            <select name="from" id="from" title="From currency">
+                <option value="USD" Selected>USD</option>
+            </select>
+        </div>
+        </div>
+        <i class="fa-solid fa-rotate"></i>
+        <div class="to">
+            <label for="to">To:</label>
+            <div class="select-options">
+                <img id="imgTo"  src="https://flagsapi.com/PK/shiny/64.png" alt="flag">
+            <select name="to" id="to">
+                <option value="PKR" Selected>PKR</option>
+            </select>
+        </div>
+        </div>
+    </div>
+            <div class="msg">
+                    1 USD = 278 PKR
+            </div>
+        <button type="submit" id="submit">Convert</button>
+    </form>
+    </div>
+    <script src="./codes.js"></script>
+    <script src="./app.js"></script>
+</body>
+</html>
